@@ -1,5 +1,5 @@
 package carddeck;
 
-public record Card() {
+public record Card(String value) {
 
 }
