@@ -8,17 +8,38 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class DeckTest {
 
     @Test
-    void createWith32Cards() {
-        Deck deck = new Deck(0);
+    void createEmpty() {
+        Deck deck = new Deck();
 
         assertEquals(0, deck.size());
     }
 
     @Test
-    void deckMustNotHaveNegativeCardsOnInit() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> new Deck(-1));
+    void createDeckWith1Card() {
+        Deck deck = new Deck(new Card());
 
-        assertEquals("A deck must not be less than empty", ex.getMessage());
+        assertEquals(1, deck.size());
+    }
+
+    @Test
+    void createDeckWith2Cards() {
+        Deck deck = new Deck(new Card(), new Card());
+
+        assertEquals(2, deck.size());
+    }
+
+    @Test
+    void dontAllowNullParameterForConstructor() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> new Deck((Card[]) null));
+
+        assertEquals("cards must not be null", ex.getMessage());
+    }
+
+    @Test
+    void dontAllowNullCards() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> new Deck((Card) null));
+
+        assertEquals("every card must not be null", ex.getMessage());
     }
 
 }

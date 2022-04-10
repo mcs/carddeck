@@ -2,14 +2,25 @@ package carddeck;
 
 public class Deck {
 
-    private final int cards;
+    private final Card[] cards;
 
-    public Deck(int cards) {
-        if (cards < 0) throw new IllegalArgumentException("A deck must not be less than empty");
+    public Deck(Card... cards) {
+        if (cards == null) {
+            throw new IllegalArgumentException("cards must not be null");
+        }
+        for (Card card : cards) {
+            if (card == null) {
+                throw new IllegalArgumentException("every card must not be null");
+            }
+        }
         this.cards = cards;
     }
 
+    public Deck() {
+        this.cards = new Card[0];
+    }
+
     public int size() {
-        return cards;
+        return cards.length;
     }
 }
