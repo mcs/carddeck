@@ -1,6 +1,7 @@
 package carddeck;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Deck {
@@ -32,5 +33,13 @@ public class Deck {
         if (size() == 0)
             throw new IllegalStateException();
         return cards.remove(0);
+    }
+
+    public void shuffle() {
+        Collections.shuffle(cards);
+    }
+
+    public void append(Card card) {
+        cards.add(card);
     }
 }

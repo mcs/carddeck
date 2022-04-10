@@ -2,8 +2,9 @@ package carddeck;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class DeckTest {
@@ -82,5 +83,41 @@ class DeckTest {
         assertEquals(1, deck.size());
         assertEquals("Ah", deck.take().value());
         assertEquals(0, deck.size());
+    }
+
+    @Test
+    void appendCards() {
+        Deck deck = new Deck();
+
+        Card card1 = new Card("1");
+        Card card2 = new Card("2");
+        deck.append(card1);
+        deck.append(card2);
+
+        assertSame(card1, deck.take());
+        assertSame(card2, deck.take());
+    }
+
+    @Test
+    void shuffle100Cards() {
+        Deck toStayUnshuffled = new Deck();
+        Deck toBeShuffled = new Deck();
+        // 100 cards provide 100! = 10^157 possibilities, so should practically never randomly fail
+        for (int i = 1; i <= 100; i++) {
+            Card c = new Card("" + i);
+            toStayUnshuffled.append(c);
+            toBeShuffled.append(c);
+        }
+
+        toBeShuffled.shuffle();
+
+        assertEquals(toStayUnshuffled.size(), toBeShuffled.size());
+        boolean shuffled = false;
+        while (!shuffled && toBeShuffled.size() > 0) {
+            if (!Objects.equals(toBeShuffled.take(), toStayUnshuffled.take())) {
+                shuffled = true;
+            }
+        }
+        assertTrue(shuffled, "Deck has not been shuffled");
     }
 }
