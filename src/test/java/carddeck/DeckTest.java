@@ -1,6 +1,5 @@
 package carddeck;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,8 +66,21 @@ class DeckTest {
     @Test
     void takeOrder() {
         Deck deck = new Deck(new Card("Ah"), new Card("Ts"));
+        assumeTrue(deck.size() == 2);
 
         assertEquals("Ah", deck.take().value());
         assertEquals("Ts", deck.take().value());
+    }
+
+    @Test
+    void acceptSameCardMultipleTimes() {
+        Card card = new Card("Ah");
+        Deck deck = new Deck(card, card);
+
+        assertEquals(2, deck.size());
+        assertEquals("Ah", deck.take().value());
+        assertEquals(1, deck.size());
+        assertEquals("Ah", deck.take().value());
+        assertEquals(0, deck.size());
     }
 }
