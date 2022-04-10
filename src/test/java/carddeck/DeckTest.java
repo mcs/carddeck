@@ -42,4 +42,21 @@ class DeckTest {
         assertEquals("every card must not be null", ex.getMessage());
     }
 
+    @Test
+    void throwIllegalStateExceptionIfDrawingEmptyDeck() {
+        Deck deck = new Deck();
+
+        assertThrows(IllegalStateException.class, deck::take);
+    }
+
+    @Test
+    void takeCard() {
+        Card expectedCard = new Card();
+        Deck deck = new Deck(expectedCard);
+
+        Card card = deck.take();
+
+        assertEquals(expectedCard, card);
+        assertEquals(0, deck.size());
+    }
 }
