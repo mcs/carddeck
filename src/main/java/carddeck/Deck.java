@@ -36,7 +36,7 @@ public class Deck {
     }
 
     public void shuffle() {
-        Collections.shuffle(cards);
+        Collections.reverse(cards);
     }
 
     public void append(Card card) {
