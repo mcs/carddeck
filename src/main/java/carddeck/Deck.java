@@ -31,7 +31,7 @@ public class Deck {
 
     public Card take() {
         if (size() == 0)
-            throw new IllegalStateException();
+            throw new IllegalStateException("Deck is empty");
         return cards.remove(0);
     }
 
@@ -41,5 +41,17 @@ public class Deck {
 
     public void append(Card card) {
         cards.add(card);
+    }
+
+    public List<Card> take(int amount) {
+        if (amount <= 0)
+            throw new IllegalArgumentException("Must take at least one card");
+        if (size() < amount)
+            throw new IllegalArgumentException("Not enough remaining cards in the deck");
+        List<Card> takenCards = new ArrayList<>();
+        for (int i = amount; i > 0; i--) {
+            takenCards.add(this.cards.remove(0));
+        }
+        return takenCards;
     }
 }
