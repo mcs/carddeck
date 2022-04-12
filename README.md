@@ -6,5 +6,8 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=mcs_carddeck&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=mcs_carddeck)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Card deck (actually not usable, development just started)
-A simple card deck library.
+# Pokerserver (actually not usable, development just started)
+Development of a simple card poker server.
+
+Planned features:
+- Texas Hold'em No-Limit (Ring Game and Tournaments)
