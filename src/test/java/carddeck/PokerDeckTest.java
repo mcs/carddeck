@@ -3,8 +3,8 @@ package carddeck;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -21,18 +21,34 @@ class PokerDeckTest {
     private final PokerDeck deck = new PokerDeck();
 
     @Test
-    void testToString() {
-        assertEquals("[2c 3c 4c 5c 6c 7c 8c 9c Tc Jc Qc Kc Ac 2s 3s 4s 5s 6s 7s 8s 9s Ts Js Qs Ks As 2h 3h 4h 5h 6h 7h 8h 9h Th Jh Qh Kh Ah 2d 3d 4d 5d 6d 7d 8d 9d Td Jd Qd Kd Ad]", deck.toString());
-    }
-
-    @Test
     void assertSize() {
         assertEquals(AMOUNT_ALL_CARDS, deck.size());
     }
 
     @Test
+    void testDeal() {
+        assumeTrue(deck.size() == AMOUNT_ALL_CARDS);
+
+        Card card = deck.deal();
+
+        assertNotNull(card);
+        assertEquals(51, deck.size());
+    }
+
+    @Test
+    void testDealWhenDeckEmpty() {
+        IntStream.range(0, 52).forEach(i -> deck.deal());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, deck::deal);
+        assertEquals("Not enough remaining cards in the deck", ex.getMessage());
+    }
+
+    @Test
     void assertCorrectCardDeck() {
-        Map<Suit, List<Card>> cardsPerSuit = deck.getCards().stream()
+        var cards = new ArrayList<Card>();
+        while (deck.size() > 0)
+            cards.add(deck.deal());
+        var cardsPerSuit = cards.stream()
                 .collect(Collectors.toMap(
                         Card::suit,
                         List::of,
@@ -57,49 +73,43 @@ class PokerDeckTest {
     void testForRandomSuit() {
         Random rng = new Random();
         Suit suit = Suit.values()[rng.nextInt(Suit.values().length)];
-        testShuffle(deck -> {
-            Card card = deck.getCards().get(0);
+        testRandomDealing(deck -> {
+            Card card = deck.deal();
             return card.suit() == suit;
         }, 0.25, 0.005);
     }
 
     @Test
-    void testTwoCards() {
-        testShuffle(deck -> {
-            Card card1 = deck.getCards().get(0);
-            Card card2 = deck.getCards().get(1);
+    void testTwoCardSuits() {
+        testRandomDealing(deck -> {
+            Card card1 = deck.deal();
+            Card card2 = deck.deal();
+            System.out.println(card1.suit() + " " + card2.suit() + " = " + (card1.suit() == card2.suit()));
             return card1.suit() == card2.suit();
-        }, 12./51, 0.0049);
+        }, 12. / 51, 0.0049);
+    }
+
+    @Test
+    void testTwoCardRanks() {
+        testRandomDealing(deck -> {
+            Card card1 = deck.deal();
+            Card card2 = deck.deal();
+            System.out.println(card1.rank() + " " + card2.rank() + " = " + (card1.rank() == card2.rank()));
+            return card1.rank() == card2.rank();
+        }, 3. / 51, 0.005);
     }
 
 
-    private void testShuffle(Predicate<PokerDeck> checkFunction, double probability, double epsilon) {
+    private void testRandomDealing(Predicate<PokerDeck> checkFunction, double probability, double epsilon) {
         assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
             int counter = 0;
             int i;
             for (i = 0; i < 100 || Math.abs((double) counter / i - probability) > epsilon; i++) {
-                deck.shuffle();
+                PokerDeck deck = new PokerDeck();
                 if (checkFunction.test(deck))
                     counter++;
             }
         });
     }
 
-    @Test
-    void testDeal() {
-        assumeTrue(deck.size() == AMOUNT_ALL_CARDS);
-
-        Card card = deck.deal();
-
-        assertNotNull(card);
-        assertEquals(51, deck.size());
-    }
-
-    @Test
-    void testDealWhenDeckEmpty() {
-        IntStream.range(0, 52).forEach( i -> deck.deal());
-
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, deck::deal);
-        assertEquals("Not enough remaining cards in the deck", ex.getMessage());
-    }
 }
