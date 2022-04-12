@@ -1,9 +1,10 @@
 package carddeck;
 
-public record Card(String value) {
+public record Card(Rank rank, Suit suit) {
 
     @Override
     public String toString() {
-        return value;
+        return rank.getShortcut() + suit.getShortcut();
     }
+
 }
