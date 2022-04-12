@@ -8,10 +8,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class PokerDeckTest {
 
@@ -30,7 +32,7 @@ class PokerDeckTest {
 
     @Test
     void assertCorrectCardDeck() {
-        Map<Suit, List<Card>> cardsPerSuit = deck.take(AMOUNT_ALL_CARDS).stream()
+        Map<Suit, List<Card>> cardsPerSuit = deck.getCards().stream()
                 .collect(Collectors.toMap(
                         Card::suit,
                         List::of,
@@ -56,22 +58,17 @@ class PokerDeckTest {
         Random rng = new Random();
         Suit suit = Suit.values()[rng.nextInt(Suit.values().length)];
         testShuffle(deck -> {
-            Card card = deck.take();
-            boolean result = card.suit() == suit;
-            deck.append(card);
-            return result;
+            Card card = deck.getCards().get(0);
+            return card.suit() == suit;
         }, 0.25, 0.005);
     }
 
     @Test
     void testTwoCards() {
         testShuffle(deck -> {
-            Card card1 = deck.take();
-            Card card2 = deck.take();
-            boolean result = card1.suit() == card2.suit();
-            deck.append(card1);
-            deck.append(card2);
-            return result;
+            Card card1 = deck.getCards().get(0);
+            Card card2 = deck.getCards().get(1);
+            return card1.suit() == card2.suit();
         }, 12./51, 0.0049);
     }
 
@@ -88,4 +85,21 @@ class PokerDeckTest {
         });
     }
 
+    @Test
+    void testDeal() {
+        assumeTrue(deck.size() == AMOUNT_ALL_CARDS);
+
+        Card card = deck.deal();
+
+        assertNotNull(card);
+        assertEquals(51, deck.size());
+    }
+
+    @Test
+    void testDealWhenDeckEmpty() {
+        IntStream.range(0, 52).forEach( i -> deck.deal());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, deck::deal);
+        assertEquals("Not enough remaining cards in the deck", ex.getMessage());
+    }
 }
