@@ -78,27 +78,47 @@ class PokerDeckTest {
             return card.suit() == suit;
         }, 0.25, 0.005);
     }
+    @Test
+    void testForRandomSuitOfPreviousUsedDeck() {
+        Random rng = new Random();
+        Suit[] suits = new Suit[1];
+        Suit suit = Suit.values()[rng.nextInt(Suit.values().length)];
+        suits[0] = suit;
+        testRandomDealing(deck -> {
+            Card card = deck.deal();
+            boolean result = card.suit() == suits[0];
+            suits[0] = card.suit();
+            return result;
+        }, 0.25, 0.005);
+    }
 
     @Test
     void testTwoCardSuits() {
         testRandomDealing(deck -> {
             Card card1 = deck.deal();
             Card card2 = deck.deal();
-            System.out.println(card1.suit() + " " + card2.suit() + " = " + (card1.suit() == card2.suit()));
+//            System.out.println(card1 + " " + card2);
             return card1.suit() == card2.suit();
-        }, 12. / 51, 0.0049);
+        }, 12. / 51, 0.00005);
     }
 
     @Test
-    void testTwoCardRanks() {
+    void testForRandomRank() {
+        Random rng = new Random();
+        Rank rank = Rank.values()[rng.nextInt(Rank.values().length)];
+        testRandomDealing(deck -> {
+            Card card = deck.deal();
+            return card.rank() == rank;
+        }, 4. / 52, 0.005);
+    }
+    @Test
+    void testForTwoRandomRanks() {
         testRandomDealing(deck -> {
             Card card1 = deck.deal();
             Card card2 = deck.deal();
-            System.out.println(card1.rank() + " " + card2.rank() + " = " + (card1.rank() == card2.rank()));
             return card1.rank() == card2.rank();
-        }, 3. / 51, 0.005);
+        }, 3. / 51, 0.00005);
     }
-
 
     private void testRandomDealing(Predicate<PokerDeck> checkFunction, double probability, double epsilon) {
         assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
@@ -109,6 +129,7 @@ class PokerDeckTest {
                 if (checkFunction.test(deck))
                     counter++;
             }
+            System.out.println("i: " + i + " | Counter: " + counter + " | delta: " + (Math.abs((double) counter / i - probability)));
         });
     }
 
