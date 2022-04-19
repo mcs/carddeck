@@ -100,7 +100,7 @@ class PokerDeckTest {
             Card card1 = deck.deal();
             Card card2 = deck.deal();
             return card1.suit() == card2.suit();
-        }, 12. / 51, 0.00005);
+        }, 12. / 51, 0.005);
     }
 
     @Test
@@ -119,7 +119,7 @@ class PokerDeckTest {
             Card card1 = deck.deal();
             Card card2 = deck.deal();
             return card1.rank() == card2.rank();
-        }, 3. / 51, 0.00005);
+        }, 3. / 51, 0.0005);
     }
 
     private void testRandomDealing(Predicate<PokerDeck> checkFunction, double probability, double epsilon) {
