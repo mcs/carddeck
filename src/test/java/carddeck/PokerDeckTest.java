@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -78,6 +79,7 @@ class PokerDeckTest {
             return card.suit() == suit;
         }, 0.25, 0.005);
     }
+
     @Test
     void testForRandomSuitOfPreviousUsedDeck() {
         Random rng = new Random();
@@ -97,7 +99,6 @@ class PokerDeckTest {
         testRandomDealing(deck -> {
             Card card1 = deck.deal();
             Card card2 = deck.deal();
-//            System.out.println(card1 + " " + card2);
             return card1.suit() == card2.suit();
         }, 12. / 51, 0.00005);
     }
@@ -111,6 +112,7 @@ class PokerDeckTest {
             return card.rank() == rank;
         }, 4. / 52, 0.005);
     }
+
     @Test
     void testForTwoRandomRanks() {
         testRandomDealing(deck -> {
@@ -121,16 +123,24 @@ class PokerDeckTest {
     }
 
     private void testRandomDealing(Predicate<PokerDeck> checkFunction, double probability, double epsilon) {
-        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
-            int counter = 0;
-            int i;
-            for (i = 0; i < 100 || Math.abs((double) counter / i - probability) > epsilon; i++) {
-                PokerDeck deck = new PokerDeck();
-                if (checkFunction.test(deck))
-                    counter++;
-            }
-            System.out.println("i: " + i + " | Counter: " + counter + " | delta: " + (Math.abs((double) counter / i - probability)));
-        });
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        AtomicInteger counter = new AtomicInteger(0);
+        AtomicInteger i = new AtomicInteger(0);
+        try {
+            assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+                for (; i.get() < 100 || calcDelta(probability, counter, i) > epsilon; i.incrementAndGet()) {
+                    PokerDeck deck = new PokerDeck();
+                    if (checkFunction.test(deck))
+                        counter.incrementAndGet();
+                }
+            });
+        } finally {
+            System.out.println(methodName + " | i: " + i + " | Counter: " + counter + " | delta: " + calcDelta(probability, counter, i) + " (eplison = " + epsilon + ")");
+        }
+    }
+
+    private double calcDelta(double probability, AtomicInteger counter, AtomicInteger i) {
+        return Math.abs((double) counter.get() / i.get() - probability);
     }
 
 }
