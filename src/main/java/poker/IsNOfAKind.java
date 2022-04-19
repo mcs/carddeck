@@ -1,14 +1,15 @@
 package poker;
 
 import carddeck.Card;
+import carddeck.CardRankComparator;
 import carddeck.Rank;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
 public final class IsNOfAKind implements Predicate<List<Card>> {
+    private static final CardRankComparator CARD_RANK_COMPARATOR = new CardRankComparator();
     private final ThreeOrFour threeOrFour;
 
     public IsNOfAKind(ThreeOrFour threeOrFour) {
@@ -29,7 +30,7 @@ public final class IsNOfAKind implements Predicate<List<Card>> {
     private List<Card> sortByRank(List<Card> cardList) {
         return cardList.stream()
                 .filter(Objects::nonNull)
-                .sorted(Comparator.comparingInt(c -> c.rank().ordinal()))
+                .sorted(CARD_RANK_COMPARATOR)
                 .toList();
     }
 
