@@ -14,41 +14,42 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class IsStraightFlushTest {
+class IsStraightTest {
 
-    private final IsStraightFlush isStraightFlush = new IsStraightFlush();
+    private final IsStraight isStraight = new IsStraight();
 
     @Test
     void shouldReturnFalseIfNullIsPassed() {
-        assertFalse(isStraightFlush.test(null));
+        assertFalse(isStraight.test(null));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "Ah Th Kh Jh Qh",
-            "2s 3s 4s 6s 5s",
-            "As 2s 3s 4s 5s",
-            "9h 2d 3d 4d 5d 6d Tc",
-            "2h 2d 3h 3d 4d 5d 6d"
+            "Ah Ts Kh Jh Qh",
+            "2s 3s 4s 6s 5c",
+            "Ad 2s 3s 4s 5s",
+            "9h 2d 3d 4s 5d 6d Tc",
+            "As 2h 3h 4h 5h 6c 7h",
+            "As Ac 2h 2d 3h 4h 5h"
     })
-    void shouldResolveValidStraightFlush(String cardsParam) {
+    void shouldResolveValidStraight(String cardsParam) {
         List<Card> cards = CardFactory.createCards(cardsParam);
-        assertTrue(isStraightFlush.test(cards));
+        assertTrue(isStraight.test(cards));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
             "2h 3h 4h 5h 7h",
             "Kh Ah 2h 3h 4h",
-            "As 2h 3h 4h 5h 6c 7h"
+            "2s 3s 4s 5s 6s",
     })
-    void shouldNotResolveInvalidStraightFlush(String cardsParam) {
+    void shouldNotResolveInvalidStraight(String cardsParam) {
         List<Card> cards = CardFactory.createCards(cardsParam);
-        assertFalse(isStraightFlush.test(cards));
+        assertFalse(isStraight.test(cards));
     }
 
     @Test
-    void shouldFindAllStraightFlushCombinations() {
+    void shouldFindAllStraightCombinations() {
         PokerDeck deck = new PokerDeck();
         List<Card> allCards = new ArrayList<>();
         while (deck.size() > 0) {
@@ -61,21 +62,21 @@ class IsStraightFlushTest {
 
         int deckSize = allCards.size();
         int i = 0;
-        int countResolvedStraightFlushes = 0;
+        int countResolvedStraightes = 0;
         for (int a = 0; a < deckSize - 4; a++) {
             for (int b = a + 1; b < deckSize - 3; b++) {
                 for (int c = b + 1; c < deckSize - 2; c++) {
                     for (int d = c + 1; d < deckSize - 1; d++) {
                         for (int e = d + 1; e < deckSize; e++) {
                             i++;
-                            if (isStraightFlush.test(List.of(
+                            if (isStraight.test(List.of(
                                     allCards.get(a),
                                     allCards.get(b),
                                     allCards.get(c),
                                     allCards.get(d),
                                     allCards.get(e)
                             ))) {
-                                countResolvedStraightFlushes++;
+                                countResolvedStraightes++;
                             }
                         }
                     }
@@ -83,7 +84,7 @@ class IsStraightFlushTest {
             }
         }
         assumeTrue(65_780 == i);
-        assertEquals(20, countResolvedStraightFlushes);
+        assertEquals(Math.pow(2, 5) * 10 - 20, countResolvedStraightes);
     }
 
 }
