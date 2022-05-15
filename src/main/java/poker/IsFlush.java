@@ -1,9 +1,9 @@
 package poker;
 
 import carddeck.Card;
-import carddeck.CardSuitComparator;
 import carddeck.Suit;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class IsFlush {
@@ -15,7 +15,7 @@ public class IsFlush {
             return false;
         }
         List<Card> sortedCards = cards.stream()
-                .sorted(new CardSuitComparator())
+                .sorted(Comparator.comparing(Card::suit))
                 .toList();
         int suitsInARow = 1;
         Suit lastSuit = null;

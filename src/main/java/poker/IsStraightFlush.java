@@ -4,7 +4,10 @@ import carddeck.Card;
 import carddeck.Rank;
 import carddeck.Suit;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -18,8 +21,11 @@ public class IsStraightFlush implements Predicate<List<Card>> {
     }
 
     private boolean findEveryButLowestStraightFlush(List<Card> cards) {
-        List<Card> sortedCards = new ArrayList<>(cards);
-        sortedCards.sort(Comparator.comparing(Card::suit).thenComparing(Card::rank));
+        List<Card> sortedCards = cards.stream()
+                .sorted(Comparator
+                        .comparing(Card::suit)
+                        .thenComparing(Card::rank))
+                .toList();
         int maxFoundInARow = 0;
         int count = 0;
         Card lastCard = null;
