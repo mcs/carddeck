@@ -23,9 +23,15 @@ class IsFlushTest {
         assertFalse(isFlush.test(null));
     }
 
+    @Test
+    void shouldNotResolveFlushForEmptyList() {
+        assertFalse(isFlush.test(List.of()));
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
-            "Ad 3d 4d 5d 6d"
+            "Ad 3d 4d 5d 6d",
+            "Ad 2s 3d 4d 5d 6d"
     })
     void shouldResolveValidFlush(String cardsParam) {
         List<Card> cards = CardFactory.createCards(cardsParam);
@@ -35,7 +41,8 @@ class IsFlushTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "Ah 2h 3h 4h 5s",
-            "Ah 2h 3h 4h 5h"
+            "Ah 2h 3h 4h 5h",
+            "3s"
     })
     void shouldNotResolveInvalidFlush(String cardsParam) {
         List<Card> cards = CardFactory.createCards(cardsParam);

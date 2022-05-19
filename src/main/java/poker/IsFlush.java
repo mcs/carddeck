@@ -1,10 +1,10 @@
 package poker;
 
 import carddeck.Card;
-import carddeck.Suit;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class IsFlush {
 
@@ -14,23 +14,11 @@ public class IsFlush {
         if (cards == null || isStraightFlush.test(cards)) {
             return false;
         }
-        List<Card> sortedCards = cards.stream()
-                .sorted(Comparator.comparing(Card::suit))
-                .toList();
-        int suitsInARow = 1;
-        Suit lastSuit = null;
-        for (Card card : sortedCards) {
-            Suit suit = card.suit();
-            if (lastSuit == suit) {
-                suitsInARow++;
-                if (suitsInARow == 5)
-                    return true;
-            } else {
-                suitsInARow = 1;
-            }
-            lastSuit = suit;
-        }
-        return false;
+        return cards.stream()
+                .map(Card::suit)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values().stream()
+                .anyMatch(count -> count >= 5);
     }
 
 }
