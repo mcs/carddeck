@@ -1,12 +1,12 @@
 package poker;
 
 import carddeck.Card;
-import carddeck.Rank;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class IsNOfAKind implements Predicate<List<Card>> {
     private final ThreeOrFour threeOrFour;
@@ -21,33 +21,18 @@ public final class IsNOfAKind implements Predicate<List<Card>> {
         if (cardList == null) {
             return false;
         }
-        var sortedCards = sortByRank(cardList);
-        int maxInARow = findMaxRankOccurrences(sortedCards);
-        return maxInARow == threeOrFour.n;
+        return findMaxRankOccurrences(cardList);
     }
 
-    private List<Card> sortByRank(List<Card> cardList) {
+    private boolean findMaxRankOccurrences(List<Card> cardList) {
         return cardList.stream()
                 .filter(Objects::nonNull)
-                .sorted(Comparator.comparing(Card::rank))
-                .toList();
-    }
-
-    private int findMaxRankOccurrences(List<Card> cards) {
-        int currentInARow = 0;
-        int maxInARow = 0;
-        Rank lastRank = null;
-        for (Card card : cards) {
-            Rank rank = card.rank();
-            if (lastRank == rank) {
-                currentInARow++;
-                maxInARow = Math.max(currentInARow, maxInARow);
-            } else {
-                currentInARow = 1;
-            }
-            lastRank = rank;
-        }
-        return maxInARow;
+                .map(Card::rank)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values().stream()
+                .mapToInt(Math::toIntExact)
+                .max()
+                .orElse(0) == threeOrFour.n;
     }
 
     public enum ThreeOrFour {

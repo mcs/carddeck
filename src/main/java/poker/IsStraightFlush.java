@@ -37,8 +37,8 @@ public class IsStraightFlush implements Predicate<List<Card>> {
                 } else {
                     count = 0;
                 }
+                maxFoundInARow = Math.max(maxFoundInARow, count);
             }
-            maxFoundInARow = Math.max(maxFoundInARow, count);
             lastCard = c;
         }
         return maxFoundInARow >= 4;

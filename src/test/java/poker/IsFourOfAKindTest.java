@@ -27,6 +27,11 @@ class IsFourOfAKindTest {
         assertFalse(isFourOfAKind.test(null));
     }
 
+    @Test
+    void shouldReturnFalseIfEmptyListIsPassed() {
+        assertFalse(isFourOfAKind.test(List.of()));
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "Js Jc Jh Jd 7s 8c 2h",

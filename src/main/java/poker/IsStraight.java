@@ -34,8 +34,8 @@ public class IsStraight implements Predicate<List<Card>> {
                 } else {
                     inARow = 1;
                 }
+                maxFoundInARow = Math.max(maxFoundInARow, inARow);
             }
-            maxFoundInARow = Math.max(maxFoundInARow, inARow);
             previousCard = card;
         }
         return maxFoundInARow >= 5;
