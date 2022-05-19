@@ -91,6 +91,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <testStrengthThreshold>100</testStrengthThreshold>
+                </configuration>
             </plugin>
         </plugins>
     </build>
