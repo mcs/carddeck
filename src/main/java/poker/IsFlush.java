@@ -21,7 +21,7 @@ public class IsFlush {
         Suit lastSuit = null;
         for (Card card : sortedCards) {
             Suit suit = card.suit();
-            if (lastSuit != null && lastSuit == suit) {
+            if (lastSuit == suit) {
                 suitsInARow++;
                 if (suitsInARow == 5)
                     return true;

@@ -1,7 +1,6 @@
 package poker;
 
 import carddeck.Card;
-import carddeck.Rank;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,9 +23,7 @@ public class IsStraight implements Predicate<List<Card>> {
                 .collect(Collectors.toCollection(ArrayList::new));
         sorted = new ArrayList<>(new LinkedHashSet<>(sorted));
         Card lastCard = sorted.get(sorted.size() - 1);
-        if (lastCard.rank() == Rank.ACE) {
-            sorted.add(0, lastCard);
-        }
+        sorted.add(0, lastCard);
         Card previousCard = null;
         int maxFoundInARow = 0;
         int inARow = 1;

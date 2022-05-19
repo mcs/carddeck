@@ -93,6 +93,9 @@
                 </executions>
                 <configuration>
                     <testStrengthThreshold>100</testStrengthThreshold>
+                    <mutators>
+                        <mutator>STRONGER</mutator>
+                    </mutators>
                 </configuration>
             </plugin>
         </plugins>
