@@ -20,9 +20,4 @@ class GameTest {
         assertEquals(table, game.table());
     }
 
-    @Test
-    void shouldHaveEmptySeats() {
-
-    }
-
 }
