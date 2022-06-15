@@ -17,7 +17,6 @@ public class LetsPokerTerminal {
         TextIO textIO = new TextIO(terminal);
         terminal.println("Let's play Poker!");
         terminal.println("=================");
-        terminal.println();
         terminal.println("You are the Button. Do you want to Fold, Call or raise to amount X?");
 
         String user = textIO.newStringInputReader()

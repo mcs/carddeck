@@ -8,7 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class LetsPokerCliClientApplicationTests {
+class LetsPokerCliClientApplicationIT {
 
     @MockBean
     private LetsPokerCommandLineRunner letsPokerCommandLineRunner;
