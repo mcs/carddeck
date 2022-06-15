@@ -1,18 +1,20 @@
 package letspokercliclient;
 
+import lombok.RequiredArgsConstructor;
 import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
 import org.springframework.stereotype.Component;
 
 import java.time.Month;
 
 @Component
+@RequiredArgsConstructor
 public class LetsPokerTerminal {
 
+    private final TextTerminal<?> terminal;
+
     public void runInternal() {
-        TextIO textIO = TextIoFactory.getTextIO();
-        TextTerminal<?> terminal = textIO.getTextTerminal();
+        TextIO textIO = new TextIO(terminal);
         terminal.println("Let's play Poker!");
         terminal.println("=================");
         terminal.println();

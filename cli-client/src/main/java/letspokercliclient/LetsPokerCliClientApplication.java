@@ -1,7 +1,10 @@
 package letspokercliclient;
 
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class LetsPokerCliClientApplication {
@@ -10,4 +13,8 @@ public class LetsPokerCliClientApplication {
         SpringApplication.run(LetsPokerCliClientApplication.class, args);
     }
 
+    @Bean
+    public TextTerminal<?> textTerminal() {
+        return TextIoFactory.getTextTerminal();
+    }
 }
