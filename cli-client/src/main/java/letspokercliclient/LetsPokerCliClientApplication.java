@@ -14,6 +14,7 @@ public class LetsPokerCliClientApplication {
     }
 
     @Bean
+    @SuppressWarnings("java:S1452")
     public TextTerminal<?> textTerminal() {
         return TextIoFactory.getTextTerminal();
     }
