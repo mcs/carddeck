@@ -1,4 +1,4 @@
-package letspokercliclient;
+package letspokercliclient.cli;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

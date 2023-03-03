@@ -1,10 +1,10 @@
 package game;
 
-public class Game {
+public class ServerGame {
 
     private final Table table;
 
-    public Game(Table table) {
+    public ServerGame(Table table) {
         if (table == null) {
             throw new IllegalArgumentException("table required");
         }

@@ -1,4 +1,4 @@
-package letspokercliclient;
+package letspokercliclient.cli;
 
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;

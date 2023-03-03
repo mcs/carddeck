@@ -1,4 +1,4 @@
-package letspokercliclient;
+package letspokercliclient.cli;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

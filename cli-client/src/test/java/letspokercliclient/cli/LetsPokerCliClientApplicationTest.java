@@ -1,4 +1,4 @@
-package letspokercliclient;
+package letspokercliclient.cli;
 
 import org.beryx.textio.TextTerminal;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class LetsPokerCliClientApplicationTest {
 
     @Test
     void shouldDefineTerminalBean() {
-        TextTerminal terminal = testee.textTerminal();
+        TextTerminal<?> terminal = testee.textTerminal();
         assertNotNull(terminal);
     }
 }
